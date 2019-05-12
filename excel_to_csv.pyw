@@ -38,33 +38,38 @@ def display_and_print():
     print(answer)
 
 
+def main():
+	excel_file=OpenFileDialog()
 
-excel_file=OpenFileDialog()
+	if excel_file != None and excel_file !="":
+		print(excel_file.endswith('.xlsx'))
+		#display_and_print()
+		print(type(excel_file))
 
-if excel_file != None and excel_file !="":
-	print(excel_file.endswith('.xlsx'))
-	#display_and_print()
-	print(type(excel_file))
-
-	path =os.path.dirname(excel_file)
-	file_name= os.path.split(excel_file)[len(os.path.split(excel_file))-1]
-
-
-	print("path: ",path)
-	
-	print("Archivo: ",file_name)
-	print("Ruta completa: ",len(os.path.split(excel_file)))
-	#print(os.path.dirname(excel_file)) #Obtine el path de la ruta a un fichero
-	#data_xls = pd.read_excel(excel_file, index_col=None)
-	
-	#data_xls.to_csv('C:\\ejemplos\\new_104\\csvfile.csv',sep=';', encoding='utf-8', index=False)
-	#print(data_xls)
-
-else:
-	print("Nada seleccionado")
+		path =os.path.dirname(excel_file)
+		file_name= os.path.split(excel_file)[len(os.path.split(excel_file))-1]
 
 
+		print("path: ",path)
+		
+		print("Archivo: ",file_name)
+		print("Ruta completa: ",len(os.path.split(excel_file)))
+		#print(os.path.dirname(excel_file)) #Obtine el path de la ruta a un fichero
+		#data_xls = pd.read_excel(excel_file, index_col=None)
+		
+		#data_xls.to_csv('C:\\ejemplos\\new_104\\csvfile.csv',sep=';', encoding='utf-8', index=False)
+		#print(data_xls)
 
+	else:
+		print("Nada seleccionado")
+
+
+#Interfáz gráfica
+root = tk.Tk()
+root.resizable(0,0)
+root.geometry("250x150")
+
+root.mainloop()
 
 #data_xls = pd.read_excel('excelfile.xlsx', 'Sheet2', index_col=None)
 #data_xls.to_csv('csvfile.csv', encoding='utf-8', index=False)
