@@ -1,75 +1,75 @@
+from tkinter import *
 import pandas as pd
-import os
-import tkinter as tk
-from tkinter import filedialog
 import tkinter.messagebox
+from tkinter import filedialog
+import os
+import csv, operator
 
-#Open file dialog python----------------
-
-def OpenFileDialog():
+def OpenFileDialog(filter_opd):
 	"""
 	Abre una ventana emeregente para seleccionar un archivo
 	devuelve ruta a ese archivo
 	"""
-	root = tk.Tk()
+	root = Tk()
 	root.withdraw()
-	#f = filedialog.asksaveasfile(mode='w', defaultextension=".txt")
-	path= filedialog.askopenfilename(defaultextension=".xlsx",filetypes=[("Excel files","*.xlsx"),("Excel Worksheets","*.xls"),("All files","*")])
+	filez = filedialog.askopenfilenames(parent=root,title='Choose a file',filetypes=filter_opd)
+
 	root.destroy()
-	return path
-	
-#----------------------------------------
+	return list(filez)
 
-def display_and_print():  
-    tkinter.messagebox.showinfo("Info","Just so you know")
-    tkinter.messagebox.showwarning("Warning","Better be careful")
-    tkinter.messagebox.showerror("Error","Something went wrong")
- 
-    okcancel = tkinter.messagebox.askokcancel("What do you think?","Should we go ahead?")
-    print(okcancel)
- 
-    yesno = tkinter.messagebox.askyesno("What do you think?","Please decide")
-    print(yesno)
- 
-    retrycancel = tkinter.messagebox.askretrycancel("What do you think?","Should we try again?")
-    print(retrycancel)
- 
-    answer = tkinter.messagebox.askquestion("What do you think?","What's your answer?")
-    print(answer)
+def GetSep():
+	sep=';'
+	if opcion.get() == 1:
+		sep=','
+	return sep
 
 
-def main():
-	excel_file=OpenFileDialog()
-
-	if excel_file != None and excel_file !="":
-		print(excel_file.endswith('.xlsx'))
-		#display_and_print()
-		print(type(excel_file))
-
-		path =os.path.dirname(excel_file)
-		file_name= os.path.split(excel_file)[len(os.path.split(excel_file))-1]
-
-
-		print("path: ",path)
-		
-		print("Archivo: ",file_name)
-		print("Ruta completa: ",len(os.path.split(excel_file)))
-		#print(os.path.dirname(excel_file)) #Obtine el path de la ruta a un fichero
-		#data_xls = pd.read_excel(excel_file, index_col=None)
-		
-		#data_xls.to_csv('C:\\ejemplos\\new_104\\csvfile.csv',sep=';', encoding='utf-8', index=False)
-		#print(data_xls)
-
-	else:
-		print("Nada seleccionado")
+def csv_to_excel():
+	filter_opd=[("Csv files","*.csv")]
+	paths=OpenFileDialog(filter_opd)
+	if paths != None and paths !="":
+		for path in paths:
+			name=os.path.split(path)[len(os.path.split(path))-1]
+			xlsx_name=name.replace(".csv",".xlsx")
+			xlsx=path.replace(name,xlsx_name)
+			df = pd.read_csv(path, sep=GetSep(),encoding='cp1252')
+			df.to_excel(xlsx,encoding='cp1252',index=False)
+			
+			
 
 
-#Interfáz gráfica
-root = tk.Tk()
+
+
+
+"""GUI"""
+
+root = Tk()
+root.title("Convert Files")
 root.resizable(0,0)
-root.geometry("250x150")
+root.geometry("350x150")
+"""Frame"""
+frame =Frame(root)
+frame.pack(fill="both",expand="True")
+frame.config(width="250",height="150")
+"""Radio button"""
+lb=Label(frame,text="CSV")
+lb.grid(row=0,column=0)
+opcion = IntVar()
+rd1=Radiobutton(frame, text="delimitado por coma",variable=opcion, value=1)
+rd1.grid(row=2,column=2)
+
+rd2=Radiobutton(frame, text="delimitado por punto y coma", variable=opcion, value=2)
+rd2.grid(row=2,column=1)
+rd2.select()
+
+"""Radio button"""
+buttonExceltoCSV= Button(frame,text="Excel a CSV")
+buttonCSVtoExcel= Button(frame,text="CSV a Excel",command=csv_to_excel)
+buttonExceltoCSV.grid(row=6,column=1)
+buttonCSVtoExcel.grid(row=6,column=2)
+
+csv_file="C:\\ejemplos\\direccionamiento\\datos104_prueba2.csv"
+
+
 
 root.mainloop()
-
-#data_xls = pd.read_excel('excelfile.xlsx', 'Sheet2', index_col=None)
-#data_xls.to_csv('csvfile.csv', encoding='utf-8', index=False)
