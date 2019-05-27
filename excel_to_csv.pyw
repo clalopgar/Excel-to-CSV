@@ -43,7 +43,7 @@ def csv_to_excel():
 				name=os.path.split(path)[len(os.path.split(path))-1]
 				xlsx_name=name.replace(".csv",".xlsx")
 				xlsx=path.replace(name,xlsx_name)
-				df = pd.read_csv(path, sep=GetSep(),encoding='cp1252')
+				df = pd.read_csv(path, sep=GetSep(),encoding='cp1252',dtype=str)
 				df.to_excel(xlsx,encoding='cp1252',index=False)
 			except:
 				tkinter.messagebox.showerror("Error","Error con el fichero: "+name)
@@ -60,7 +60,7 @@ def excel_to_csv():
 				name=os.path.split(path)[len(os.path.split(path))-1]
 				csv_name=name.replace(".xlsx",".csv")
 				csv=path.replace(name,csv_name)
-				df = pd.read_excel(path,encoding='cp1252')
+				df = pd.read_excel(path,encoding='cp1252',dtype=str)
 				df.to_csv(csv,encoding='cp1252',index=False, sep=GetSep())
 			except:
 				tkinter.messagebox.showerror("Error","Error con el fichero: "+name)	
@@ -74,7 +74,7 @@ def csv_to_csv():
 		for path in paths:
 			try:
 				name=os.path.split(path)[len(os.path.split(path))-1]
-				df = pd.read_csv(path, sep=GetSep(),encoding='cp1252')
+				df = pd.read_csv(path, sep=GetSep(),encoding='cp1252',dtype=str)
 				df.to_csv(path,encoding='cp1252',index=False,sep=SepCSV())
 			except:
 				tkinter.messagebox.showerror("Error","Error con el fichero: "+name)
