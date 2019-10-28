@@ -5,6 +5,7 @@ from tkinter import filedialog
 import os
 import csv, operator
 
+
 def OpenFileDialog(filter_opd):
 	"""
 	Abre una ventana emeregente para seleccionar un archivo
@@ -51,7 +52,7 @@ def csv_to_excel():
 		paths=None
 			
 def excel_to_csv():
-	filter_opd=[("Csv files","*.xlsx")]
+	filter_opd=[("Excel files","*.xlsx")]
 	paths=OpenFileDialog(filter_opd)
 	if paths != None and paths !=[]:
 
@@ -80,6 +81,46 @@ def csv_to_csv():
 				tkinter.messagebox.showerror("Error","Error con el fichero: "+name)
 		tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso")	
 		paths=None
+
+def mergeCSV():
+	
+	dirname = filedialog.askdirectory(parent=root,initialdir="/",title='Please select a directory')
+	print (dirname)
+	if len(dirname)>0:
+	
+		dirSave = os.path.join(dirname,"Merge")
+		
+		dirs = os.listdir(dirname)
+		if len(dirs)>=2:
+			
+			try:
+				os.mkdir(dirSave)
+			except:
+				tkinter.messagebox.showerror("Error","Ya existe carpeta Merge")
+			
+			dir_1=os.path.join(dirname,str(dirs[0]))
+			dirs_1, subdirs_1, files_1 = next(os.walk(dir_1))
+			dir_2=os.path.join(dirname,str(dirs[1]))
+			dirs_2, subdirs_2, files_2 = next(os.walk(dir_2))
+		
+			if files_1 == files_2:
+				
+				
+				for f in files_1:
+					if str(f).endswith(".csv"):
+						print(f)
+						s=','
+						df1 = pd.read_csv(os.path.join(dirs_1,str(f)),error_bad_lines=False,sep=s,encoding='cp1252',dtype=str)
+						df2 = pd.read_csv(os.path.join(dirs_2,str(f)),error_bad_lines=False,sep=s,encoding='cp1252',dtype=str)
+						out = df1.append(df2)
+						s=';'
+						#print(out)
+						csv =os.path.join(dirSave,str(f))
+						sep=";"
+						out.to_csv(csv,encoding='cp1252',index=False,sep=sep)
+			tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso")	
+
+  			
 
 
 
@@ -111,14 +152,32 @@ rd2.select()
 
 
 """Radio button"""
-
+"""
 buttonExceltoCSV= Button(root,text="Excel a CSV",command=excel_to_csv)
 buttonCSVtoExcel= Button(root,text="CSV a Excel",command=csv_to_excel)
 buttonCSVtoCSV= Button(root,text="CSV a CSV",command=csv_to_csv)
+mergeCSV= Button(root,text="Merge",command=csv_to_csv)
 
 buttonExceltoCSV.pack(padx=20, pady=5, side='left')
 buttonCSVtoExcel.pack(padx=20, pady=5, side='left')
 buttonCSVtoCSV.pack(padx=20, pady=15, side='left')
+mergeCSV.pack()
+"""
 
+pane = Frame(root) 
+pane.pack(fill = BOTH, expand = True) 
+  
+# button widgets which can also expand and fill 
+# in the parent widget entirely 
+b1 = Button(pane, text = "Excel a CSV",command=excel_to_csv) 
+b1.pack(side = LEFT, expand = True, fill = BOTH) 
+  
+b2 = Button(pane, text = "CSV a Excel",command=csv_to_excel) 
+b2.pack(side = LEFT, expand = True, fill = BOTH) 
+  
+b3 = Button(pane, text = "CSV a CSV",command=csv_to_csv) 
+b3.pack(side = LEFT, expand = True, fill = BOTH) 
+b4 = Button(pane, text = "Merge",command=mergeCSV ) 
+b4.pack(side = LEFT, expand = True, fill = BOTH) 
 
 root.mainloop()
