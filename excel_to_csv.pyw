@@ -46,9 +46,10 @@ def csv_to_excel():
 				xlsx=path.replace(name,xlsx_name)
 				df = pd.read_csv(path, sep=GetSep(),encoding='cp1252',dtype=str)
 				df.to_excel(xlsx,encoding='cp1252',index=False)
+				tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso"+GetSep())
 			except:
 				tkinter.messagebox.showerror("Error","Error con el fichero: "+name)
-		tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso"+GetSep())
+		
 		paths=None
 			
 def excel_to_csv():
@@ -63,9 +64,10 @@ def excel_to_csv():
 				csv=path.replace(name,csv_name)
 				df = pd.read_excel(path,encoding='cp1252',dtype=str)
 				df.to_csv(csv,encoding='cp1252',index=False, sep=GetSep())
+				tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso")
 			except:
 				tkinter.messagebox.showerror("Error","Error con el fichero: "+name)	
-		tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso")
+		
 		paths=None	
 
 def csv_to_csv():
@@ -77,9 +79,10 @@ def csv_to_csv():
 				name=os.path.split(path)[len(os.path.split(path))-1]
 				df = pd.read_csv(path, sep=GetSep(),encoding='cp1252',dtype=str)
 				df.to_csv(path,encoding='cp1252',index=False,sep=SepCSV())
+				tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso")	
 			except:
 				tkinter.messagebox.showerror("Error","Error con el fichero: "+name)
-		tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso")	
+		
 		paths=None
 
 def mergeCSV():
@@ -157,7 +160,6 @@ buttonExceltoCSV= Button(root,text="Excel a CSV",command=excel_to_csv)
 buttonCSVtoExcel= Button(root,text="CSV a Excel",command=csv_to_excel)
 buttonCSVtoCSV= Button(root,text="CSV a CSV",command=csv_to_csv)
 mergeCSV= Button(root,text="Merge",command=csv_to_csv)
-
 buttonExceltoCSV.pack(padx=20, pady=5, side='left')
 buttonCSVtoExcel.pack(padx=20, pady=5, side='left')
 buttonCSVtoCSV.pack(padx=20, pady=15, side='left')
