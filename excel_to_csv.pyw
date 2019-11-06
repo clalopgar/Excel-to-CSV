@@ -74,15 +74,18 @@ def csv_to_csv():
 	filter_opd=[("Csv files","*.csv")]
 	paths=OpenFileDialog(filter_opd)
 	if paths != None and paths !=[]:
+		d=True
 		for path in paths:
 			try:
 				name=os.path.split(path)[len(os.path.split(path))-1]
 				df = pd.read_csv(path, sep=GetSep(),encoding='cp1252',dtype=str)
 				df.to_csv(path,encoding='cp1252',index=False,sep=SepCSV())
-				tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso")	
+				
 			except:
+				d=False
 				tkinter.messagebox.showerror("Error","Error con el fichero: "+name)
-		
+		if d:
+			tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso")	
 		paths=None
 
 def mergeCSV():
@@ -113,8 +116,8 @@ def mergeCSV():
 					if str(f).endswith(".csv"):
 						print(f)
 						s=','
-						df1 = pd.read_csv(os.path.join(dirs_1,str(f)),error_bad_lines=False,sep=s,encoding='cp1252',dtype=str)
-						df2 = pd.read_csv(os.path.join(dirs_2,str(f)),error_bad_lines=False,sep=s,encoding='cp1252',dtype=str)
+						df1 = pd.read_csv(os.path.join(dirs_1,str(f)),error_bad_lines=False,sep=SepCSV(),encoding='cp1252',dtype=str)
+						df2 = pd.read_csv(os.path.join(dirs_2,str(f)),error_bad_lines=False,sep=SepCSV(),encoding='cp1252',dtype=str)
 						out = df1.append(df2)
 						s=';'
 						#print(out)
