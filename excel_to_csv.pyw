@@ -39,16 +39,29 @@ def csv_to_excel():
 	filter_opd=[("Csv files","*.csv")]
 	paths=OpenFileDialog(filter_opd)
 	if paths != None and paths !=[]:
+		d=True
+		
+		
 		for path in paths:
 			try:
+
+
+
 				name=os.path.split(path)[len(os.path.split(path))-1]
 				xlsx_name=name.replace(".csv",".xlsx")
 				xlsx=path.replace(name,xlsx_name)
-				df = pd.read_csv(path, sep=GetSep(),encoding='cp1252',dtype=str)
-				df.to_excel(xlsx,encoding='cp1252',index=False)
-				tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso"+GetSep())
-			except:
-				tkinter.messagebox.showerror("Error","Error con el fichero: "+name)
+				
+				df = pd.read_csv(path, sep=GetSep(),encoding='cp1252',dtype=str,low_memory=False,header=None)
+				#df.to_excel(xlsx,encoding='cp1252',index=False, options={'strings_to_numbers': True})
+				writer = pd.ExcelWriter(xlsx, engine='xlsxwriter', options={'strings_to_numbers': True})
+				df.to_excel(writer, sheet_name='Sheet1', index=False,header=None)
+				writer.save()
+				writer.close()
+			except Exception as error:
+				tkinter.messagebox.showerror("Error",str(error))
+				d=False
+		if d:
+			tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso")	
 		
 		paths=None
 			
@@ -56,7 +69,7 @@ def excel_to_csv():
 	filter_opd=[("Excel files","*.xlsx")]
 	paths=OpenFileDialog(filter_opd)
 	if paths != None and paths !=[]:
-
+		d=True
 		for path in paths:
 			try:
 				name=os.path.split(path)[len(os.path.split(path))-1]
@@ -64,9 +77,13 @@ def excel_to_csv():
 				csv=path.replace(name,csv_name)
 				df = pd.read_excel(path,encoding='cp1252',dtype=str)
 				df.to_csv(csv,encoding='cp1252',index=False, sep=GetSep())
-				tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso")
-			except:
-				tkinter.messagebox.showerror("Error","Error con el fichero: "+name)	
+				
+			except Exception as error:
+				tkinter.messagebox.showerror("Error",str(error))
+				d=False
+		if d:
+			tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso")	
+		paths=None
 		
 		paths=None	
 
@@ -81,9 +98,9 @@ def csv_to_csv():
 				df = pd.read_csv(path, sep=GetSep(),encoding='cp1252',dtype=str)
 				df.to_csv(path,encoding='cp1252',index=False,sep=SepCSV())
 				
-			except:
+			except Exception as error:
+				tkinter.messagebox.showerror(name,str(error))
 				d=False
-				tkinter.messagebox.showerror("Error","Error con el fichero: "+name)
 		if d:
 			tkinter.messagebox.showinfo("Información","Ha finalizado correctamento el proceso")	
 		paths=None
